@@ -24,8 +24,8 @@ The Controller Manager is a core control-plane component responsible for running
 -Compare it with the desired state defined by the user.
 -Act to fix differences (create pods, delete pods, update objects, etc.)
 
-**Key Controllers Inside the Controller Manager:
-**
+#### Key Controllers Inside the Controller Manager:
+
 	1	Node Controller: Detects and responds when nodes go down Marks nodes as NotReady Evicts pods from unhealthy nodes
 	2	Replication/ReplicaSet Controller: Ensures the correct number of pod replicas exist Creates or removes pods automatically
 	3	Deployment Controller: Manages rolling updates and rollbacks
