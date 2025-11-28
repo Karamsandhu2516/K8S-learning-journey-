@@ -1,12 +1,9 @@
 # Unpacking POD
-
 A POD is a smallest and most basic deployable unit in K8S. A Pod represents a single instance of a running process in your cluster. It is designed to host containers that are tightly coupled and need to share resources.
 
-```bash
-kubectl run pod my-pod --image=nginx
+```bash kubectl run pod my-pod --image=nginx```
 
-
-## Features of POD:
+# Features of POD:
 
 All containers within a Pod share the same network namespace and storage volumes.
 
@@ -49,3 +46,5 @@ or initializing configuration files. They run sequentially.
 Sidecar Containers: A Sidecar Container is a container that runs alongside the main application container and supplements its functionality.
 To handle ancillary tasks that the main application shouldn't worry about, like logging, monitoring, network proxies. 
 They start concurrently with the main application container and run for the entire life of the Pod.
+
+
