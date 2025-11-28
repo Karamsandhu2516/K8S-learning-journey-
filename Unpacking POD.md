@@ -5,7 +5,7 @@ It is designed to host containers that are tightly coupled and need to share res
 
 \```bash
 kubectl run pod my-pod --image=nginx
-\```
+
 
 
 ## Features of POD:
