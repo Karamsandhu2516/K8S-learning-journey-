@@ -3,7 +3,9 @@
 A POD is a smallest and most basic deployable unit in K8S. A Pod represents a single instance of a running process in your cluster. 
 It is designed to host containers that are tightly coupled and need to share resources.
 
-kubectl run <pod-name> --image=<image-name>
+\```bash
+kubectl run pod <pod-name> --image=<name>
+\```
 
 ## Features of POD:
 
