@@ -1,7 +1,9 @@
+# Unpacking POD
+
 A POD is a smallest and most basic deployable unit in K8S. A Pod represents a single instance of a running process in your cluster. 
 It is designed to host containers that are tightly coupled and need to share resources.
 
-**Features of POD:**
+## Features of POD:
 
 All containers within a Pod share the same network namespace and storage volumes.
 
@@ -10,7 +12,7 @@ The Kubernetes Control Plane (specifically the Controller Manager) then creates 
 
 You never deploy individual containers to Kubernetes; you always deploy them wrapped inside a Pod.
 
-**How does POD Works:**
+## How does POD Works:
 
 When a Pod is scheduled to a Worker Node, the kubelet agent on that Node is responsible for running it. 
 The User send the POD specification request to API server. The API Server authenticates the user and validates the Pod's YAML format. 
@@ -21,7 +23,7 @@ It detects that a Pod has been scheduled to its Node. The Kubelet communicates w
 As containers start, the Kubelet constantly reports the status, events, and health checks back to the API Server.
 
 
-**POD Life-Cycle:**
+## POD Life-Cycle:
 
 **Pending State:** The Pod has been accepted by the Kubernetes cluster, but one or more of its containers has not been created or is not running yet. 
 This includes the time spent waiting for image pulls.
