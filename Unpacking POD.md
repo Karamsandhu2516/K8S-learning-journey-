@@ -35,7 +35,7 @@ or is in the process of starting or restarting.
 
 **Failed:** container terminated in failure.
 
-**The Pod Family: Containers within a Pod**
+## The Pod Family: Containers within a Pod
 
 Main Conatiner: This is the primary container that runs your core application logic (e.g., your web server, API service, or batch job). 
 A Pod is often named after its main container.
