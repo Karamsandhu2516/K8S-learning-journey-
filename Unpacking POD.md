@@ -44,7 +44,8 @@ Init Container: To perform setup tasks for the main application, such as setting
 or initializing configuration files. They run sequentially. 
 
 Sidecar Containers: A Sidecar Container is a container that runs alongside the main application container and supplements its functionality.
-To handle ancillary tasks that the main application shouldn't worry about, like logging, monitoring, network proxies. 
+To handle ancillary tasks that the main application shouldn't worry about, like logging, monitoring, network proxies.
+ 
 They start concurrently with the main application container and run for the entire life of the Pod.
 
 
