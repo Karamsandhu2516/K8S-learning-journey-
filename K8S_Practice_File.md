@@ -55,8 +55,8 @@ Context "kubernetes-admin@kubernetes" modified.
 
 ### Create LimitRange
 
-
-```apiVersion: v1
+```
+apiVersion: v1
 kind: LimitRange
 metadata:
   name: limit-practice
@@ -75,7 +75,7 @@ spec:
       memory: "256Mi"
     defaultRequest:
       cpu: "100m"
-      memory: "128Mi"```
+      memory: "128Mi" ```
 
 controlplane:~$ kubectl apply -f practice-ns.yml
 namespace/practice-ns created
