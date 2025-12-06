@@ -1,5 +1,8 @@
 ### Create NS dev
-controlplane:~$ kubectl create ns dev
+```kubectl create ns dev```
+
+**Output**
+
 namespace/dev created
 controlplane:~$ kubectl get ns
 NAME                 STATUS   AGE
@@ -9,11 +12,14 @@ kube-node-lease      Active   18d
 kube-public          Active   18d
 kube-system          Active   18d
 local-path-storage   Active   18d
-controlplane:~$ 
+
 
 
 ### Create NS K8S-class
-controlplane:~$ kubectl create ns k8s-class
+
+controlplane:~$ ```kubectl create ns k8s-class```
+
+**OutPut**
 namespace/k8s-class created
 controlplane:~$ kubectl get ns
 NAME                 STATUS   AGE
@@ -26,7 +32,10 @@ kube-system          Active   18d
 local-path-storage   Active   18d
 
 ### Create Deployment
-controlplane:~$ kubectl create deploy demo -n k8s-class --image=nginx
+
+```kubectl create deploy demo -n k8s-class --image=nginx```
+
+**Output**
 deployment.apps/demo created
 controlplane:~$ kubectl create deploy demo -n dev --image=nginx
 deployment.apps/demo created
@@ -38,11 +47,16 @@ NAME   READY   UP-TO-DATE   AVAILABLE   AGE
 demo   1/1     1            1           3m16s
 
 ### Cluster Connectivity/Context
-controlplane:~$ kubectl config set-context --current --namespace=dev
+
+controlplane:~$ ```kubectl config set-context --current --namespace=dev```
+
+**OutPut**
 Context "kubernetes-admin@kubernetes" modified.
 
 ### Create LimitRange
- apiVersion: v1
+
+
+```apiVersion: v1
 kind: LimitRange
 metadata:
   name: limit-practice
@@ -61,7 +75,7 @@ spec:
       memory: "256Mi"
     defaultRequest:
       cpu: "100m"
-      memory: "128Mi"
+      memory: "128Mi"```
 
 controlplane:~$ kubectl apply -f practice-ns.yml
 namespace/practice-ns created
