@@ -53,13 +53,48 @@ An API object used to store non-sensitive configuration data in key-value pairs.
 ### Secret:
 An API object used to store sensitive configuration data (passwords, tokens, keys). base64 encoded.
 
+### Label:
+Labels are tags you put on any object like POD to identify it.
+```metadata: labels``
+    app: cht-appp``` means this POD belongs to chat-app
 
+### Matchlabel:
+ It is selection filter to find the POD that any perticular deployment should control.
+ The labels you put on the Pods MUST match the matchLabels in the selector, or the Deployment won't manage them.
+ For Example: You put the you put the sticker of subjects(label) on your notebooks(PODS). Student(selector) need book(POD) of peticular subject. he will check the sticker(label) is he got the correct one meet the need(matchlabel). 
+```metadata: labels``
+    app: chat-app
+  matchLabels:
+    app: chat-app```
 
+A Deployment will use matchLabels: {app: my-web-app} to find and manage only the Pods that have the label app: my-web-app.
 
+### Scheduling Gates:
+Scheduling Gates are a way to temporarily tell the Kubernetes Scheduler to completely ignore a Pod until an external system says it is ready.
 
+**Why Do We Need Them?**
+ when you create a Pod, the  Scheduler is always tries to find the best available Node for the Pod to run on. This process is complex:
 
+Filtering: Check if the Node has enough CPU/RAM.
 
+Scoring: Pick the "best" Node based on rules like affinity (run next to another Pod).
 
+However, some applications have external dependencies that Kubernetes knows nothing about:
+
+Custom Storage: The Pod needs a specific type of network storage provisioned by an external tool.
+
+Security Policy: A security scanner must approve the Pod's image before it can run.
+
+ The Scheduler wastes time repeatedly trying to schedule it, only to fail.
+
+ #### How it worked:
+ You add a security gate while creating YML
+ ```schedulingGates:``
+     - name: "gate-keeper"```
+The Scheduler sees the gate and puts the Pod into a special, frozen state called SchedulingGated
+A custom controller (an external program you or a vendor built) watches for Pods with this specific gate. It performs its security check or provisions the storage.
+When the external system is done and the Pod is safe/ready, that external system uses the Kubernetes API to remove the gate from the Pod's specification.
+Once the schedulingGates list is empty, the Pod is instantly released into the normal queue, and the Kubernetes Scheduler finds a Node for it.
 
 
 
