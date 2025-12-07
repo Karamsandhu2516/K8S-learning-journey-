@@ -1,5 +1,16 @@
 # k8S resources:
 ## Admission Control and Security Concepts (Mutating/Validating)
+
+### Downward API:
+it is a way for the kubelet (the agent running on each node) to inject metadata about the Pod and the cluster into the running containers.
+**The Downward API works by making Pod metadata available to the container in one of two ways:**
+
+**As Environment Variables:**
+Ideal for passing simple, small pieces of information that the application needs to read once at startup, like the Pod's name or namespace.
+
+**As Volume Files:**
+Suitable for exposing information that is either larger (like annotations or labels) or that the application might want to read periodically while running. The kubelet dynamically creates a read-only volume and then creates files within that volume. The content of each file is the value of the requested field.
+
 ### Mutating : 
 An external service registered with the API Server via a MutatingWebhookConfiguration resource.
 
