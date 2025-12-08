@@ -109,6 +109,25 @@ Once the schedulingGates list is empty, the Pod is instantly released into the n
 
 
 
+### Rolling Update:
+A Rolling Update is a strategy used to update an application without causing any downtime for users. It achieves this by replacing the old version of the application with the new version gradually, one piece at a time.
+
+**Why K8s Uses Rolling Updates (The Problem it Solves)**
+Before K8s, updating a live application often involved one of two problematic strategies:
+
+Recreate: Shut down all the old servers, and then start all the new servers. Result: Downtime. The application is completely unavailable while the new servers are starting up.
+
+Ramp Up/Ramp Down (Simultaneous): Start all the new servers, and then shut down all the old servers. Result: Resource Hog. For a brief time, you need double the capacity (8 servers total), which can be very expensive
+
+**How the Rolling Update Works (The "Roll")**
+The process is managed by the Deployment controller in K8s, following these steps automatically:
+Deployment Controller: Reads the new image (nginx:1.19) and creates a new Pod with the updated image.
+New Pod Starts: The new Pod starts up and reports that it is Ready to receive traffic.
+Old Pod Terminates: Only after the new Pod is ready, the Deployment controller terminates one of the old Pods (the one running nginx:1.16).
+Repeat: It repeats this cycle (start new, terminate old) until all the old Pods are replaced by the new Pods.
+
+```kubectl set image deployment/my-app nginx=nginx:1.20```
+The command essentially tells Kubernetes: "Go to the my-app Deployment, find the container named nginx inside it, and update its image to nginx:1.20." This action triggers the Rolling Update.
 
 
 
