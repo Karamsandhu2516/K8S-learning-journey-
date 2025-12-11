@@ -69,6 +69,27 @@ Labels are tags you put on any object like POD to identify it.
 ```metadata: labels``
     app: cht-appp``` means this POD belongs to chat-app
 
+### Selector:
+A Selector is the search query you use to find all the objects that have a specific set of Labels. 
+
+#### Types of Selector:
+
+**Equity Based**
+It selects objects based on exact matches of the label key and value.
+```environment=production``` 
+Find objects where the environment label is exactly production.
+**set-Based Selector**
+A set-based selector is a flexible filter that matches objects (like Pods) based on whether their labels belong to a list of values or whether a specific label key exists or doesn't exist on the object.rather than just checking for one exact match.
+
+## 🏷️ Kubernetes Set-Based Selector Summary
+
+| Operator | Simple Logic | Example Selector | Matches |
+| :--- | :--- | :--- | :--- |
+| **`in`** | Value is one of a set of options (OR logic on values) | `tier in (frontend, backend)` | `tier: frontend` **OR** `tier: backend` |
+| **`notin`** | Value is *not* one of a set of options | `bug-status notin (fixed, closed)` | Any value **other than** `fixed` or `closed` (e.g., `new`, `open`) |
+| **`Exists`** | The label key is present | `has-monitoring` | Any object with the label key `has-monitoring` |
+| **`DoesNotExist`** | The label key is absent | `!legacy-code` | Any object **without** the label key `legacy-code` |
+
 ### Matchlabel:
  It is selection filter to find the POD that any perticular deployment should control.
  The labels you put on the Pods MUST match the matchLabels in the selector, or the Deployment won't manage them.
