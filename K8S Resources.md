@@ -129,8 +129,60 @@ When the external system is done and the Pod is safe/ready, that external system
 Once the schedulingGates list is empty, the Pod is instantly released into the normal queue, and the Kubernetes Scheduler finds a Node for it.
 
 
+### Taints and Toleration:
+The key to understanding their value is realizing that Kubernetes isn't designed just for placing one Pod on one available Node. It's designed for complex cluster management and policy enforcement across many different types of hardware and workloads. Taints and Tolerations are essential tools for policy, segregation, and specialized hardware usage.
+
+| **Without Taints & Tolerations** | **With Taints & Tolerations** |
+|----------------------------------|-------------------------------|
+| **Problem:** Any regular Pod (e.g., a simple web server) could accidentally land on your expensive GPU Node, wasting thousands of dollars of resources that should be reserved for critical AI jobs. | **Solution:** Taint all GPU Nodes with `special-hardware=gpu:NoSchedule`. Only Pods that actually need a GPU will use a matching Toleration, ensuring your expensive GPU resources are used efficiently. |
 
 
+Taint is applies to a Node. When a Node has a Taint, if does not allow any new Pod to schedule on that Pod, unless the Pod has a matching "key".
+That way you can reserve a Node for specific type of Pods which need more security or maybe special resources.
+
+#### A Taint has two parts: a key/value pair and a specific Effect.
+
+| **Effect**          | **Layman's Terms Analogy**                                                     | **Kubernetes Action**                                                                                 |
+|---------------------|-------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------|
+| **NoSchedule**      | 🔑 *"You can't move in."*                                                     | New Pods will **not be scheduled** onto the tainted node.                                             |
+| **PreferNoSchedule**| 🔑 *"Please don't move in (but you can if there's no room anywhere else)."*   | Scheduler **avoids the node**, but it’s not a strict rule.                                            |
+| **NoExecute**       | 🔑 *"You can't move in, AND if you're already here, you will be EVICTED."*    | New Pods are **blocked**, and existing Pods **without tolerations are evicted** from the node.        |
+```kubectl taint node <NODE_NAME> critical=true:NoSchedule```
+If you run any Pod on this node that would be in pending state because the node taint effect
+
+### Toleration
+A Toleration is applied to a Pod. If the Taint is the "No Trespassing" sign on the Node, the Toleration is the "Special Permit" or "Key" that the Pod carries, proving it is allowed to ignore that specific Taint.
+
+For a Pod to be placed on a Tainted Node, the Pod must have a Toleration that exactly matches the Taint's key, value, and effect.
+
+| **Taint (on Node)**            | **Toleration (on Pod)**                                     | **Result**                                                                                   |
+|--------------------------------|--------------------------------------------------------------|-----------------------------------------------------------------------------------------------|
+| `key=value:NoSchedule`         | No matching toleration                                       | Pod is **rejected** by the Node.                                                             |
+| `key=value:NoSchedule`         | `key=value`, operator=`Equal`, effect=`NoSchedule`           | Pod is **allowed** onto the Node.                                                            |
+| `key=value:NoSchedule`         | `key=value`, operator=`Exists`, effect=`NoSchedule`          | Pod is **allowed** onto the Node (value does **not** need to match when using `Exists`).     |
+
+GitHub sees the first ```markdown and then **never finds a matching closing fence**, so it keeps treating everything after it as code → greying out *all your notes*.
+
+---
+
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: tolerant-pod
+spec:
+  containers:
+    - name: nginx
+      image: nginx
+  tolerations:
+    - key: "critical"
+      operator: "Equal"
+      value: "true"
+      effect: "NoSchedule"
+```
+```kubectl get pod tolerant-pod -o wide```
+This Pod should quickly move to Running and the NODE column should show the name of the Tainted Node (node01), because its special permit (the Toleration) allowed it to bypass the "No Trespassing" sign (the Taint).
 
 
 
