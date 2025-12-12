@@ -146,8 +146,12 @@ That way you can reserve a Node for specific type of Pods which need more securi
 |---------------------|-------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------|
 | **NoSchedule**      | 🔑 *"You can't move in."*                                                     | New Pods will **not be scheduled** onto the tainted node.                                             |
 | **PreferNoSchedule**| 🔑 *"Please don't move in (but you can if there's no room anywhere else)."*   | Scheduler **avoids the node**, but it’s not a strict rule.                                            |
-| **NoExecute**       | 🔑 *"You can't move in, AND if you're already here, you will be EVICTED."*    | New Pods are **blocked**, and existing Pods **without tolerations are evicted** from the node.        |
+| **NoExecute**       | 🔑 *"You can't move in, AND if you're already here, you will be EVICTED."*    | New Pods are **blocked**, and existing Pods **without tolerations are evicted** from the node.  
+
+
 ```kubectl taint node <NODE_NAME> critical=true:NoSchedule```
+
+
 If you run any Pod on this node that would be in pending state because the node taint effect
 
 ### Toleration
@@ -161,9 +165,6 @@ For a Pod to be placed on a Tainted Node, the Pod must have a Toleration that ex
 | `key=value:NoSchedule`         | `key=value`, operator=`Equal`, effect=`NoSchedule`           | Pod is **allowed** onto the Node.                                                            |
 | `key=value:NoSchedule`         | `key=value`, operator=`Exists`, effect=`NoSchedule`          | Pod is **allowed** onto the Node (value does **not** need to match when using `Exists`).     |
 
-GitHub sees the first ```markdown and then **never finds a matching closing fence**, so it keeps treating everything after it as code → greying out *all your notes*.
-
----
 
 
 ```yaml
@@ -181,7 +182,9 @@ spec:
       value: "true"
       effect: "NoSchedule"
 ```
+
 ```kubectl get pod tolerant-pod -o wide```
+
 This Pod should quickly move to Running and the NODE column should show the name of the Tainted Node (node01), because its special permit (the Toleration) allowed it to bypass the "No Trespassing" sign (the Taint).
 
 
