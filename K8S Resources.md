@@ -198,6 +198,20 @@ spec:
 
 This Pod should quickly move to Running and the NODE column should show the name of the Tainted Node (node01), because its special permit (the Toleration) allowed it to bypass the "No Trespassing" sign (the Taint).
 
+### Probes:
+Kubernetes Probe is a diagnostic check that the Kubelet (the agent on each worker node) performs periodically to ensure your application inside the container is:
+Running correctly.
+Ready to handle user traffic.
+
+#### Kubernetes Probes: Health Checks for Containers
+
+Probes are vital for ensuring the reliability and self-healing capabilities of applications running in Kubernetes. They are divided into two main types:
+
+| Probe Type | What does it check? | What happens if it fails? | When to use it? |
+| :--- | :--- | :--- | :--- |
+| **Liveness** | Is the application **ALIVE** and healthy enough to function? (e.g., Has it reached a deadlock or gotten stuck?) | **RESTART** the container. | To recover the application automatically from stuck or unresponsive states without human intervention. |
+| **Readiness** | Is the application **READY** to handle **USER TRAFFIC** right now? (e.g., Has it finished loading configuration or connecting to the database?) | **STOPS** sending traffic to the container (the Pod stays running). | To prevent users from hitting a Pod that is still initializing or during graceful shutdown/scale-down. |
+
 
 
 ### Limitrange: 
