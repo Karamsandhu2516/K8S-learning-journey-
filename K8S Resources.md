@@ -213,6 +213,45 @@ Probes are vital for ensuring the reliability and self-healing capabilities of a
 | **Readiness** | Is the application **READY** to handle **USER TRAFFIC** right now? (e.g., Has it finished loading configuration or connecting to the database?) | **STOPS** sending traffic to the container (the Pod stays running). | To prevent users from hitting a Pod that is still initializing or during graceful shutdown/scale-down. |
 
 
+### Deployment Types:
+When you update an application, a Deployment Strategy is how you replace the old version with the new version on your servers. 
+Here is a breakdown of the three common deployment types in simple terms:
+#### 1. Recreate Deployment: 
+Kubernetes completely shuts down all the old version Pods before it starts any of the new version Pods. "Kill the old, then start the new."
+
+#### Why We Need It (Use Case):
+
+**Simple Testing:** When you are just running unit tests or integration tests and downtime doesn't matter.
+
+**Monolithic Applications:** Sometimes legacy applications (like an older database application) cannot tolerate two versions running at the same time, usually because they share a single resource or modify schema in incompatible ways. In these rare cases, you have no choice but to use this method.
+
+#### 2. Blue/Green Deployment:
+This strategy runs two complete, parallel environments: "Blue" (the current version) and "Green" (the new version).
+
+#### How it Works:
+The "Blue" environment (Version 1) serves all user traffic.
+The "Green" environment (Version 2) is deployed and fully tested alongside Blue, but receives no user traffic.
+When testing is complete, you instantly update the Service (the Kubernetes router) to point all traffic from Blue to Green.
+If anything goes wrong, you instantly switch the Service back to Blue
+
+**Note:**Low risk of service disruption, but high cost because you need double the infrastructure (two full environments).
+
+#### 3. Canary Deployment:
+The Canary strategy is the most cautious and controlled method. It involves sending a small percentage of user traffic to the new version first.
+
+### How it Works:
+The old version (V1) serves 100% of traffic.
+A tiny number of new version (V2) Pods are deployed.
+A small fraction of traffic (e.g., 5%) is routed to the V2 Pods.
+You monitor the health and performance of the V2 Pods.
+If they are healthy, you slowly increase the traffic to V2 (e.g., 25%, then 50%). If V2 fails, you immediately remove the V2 Pods and all traffic remains on V1.
+
+### Why We Need It (Use Case):
+
+**Risk Mitigation:** Deploying major changes or new features where you anticipate potential bugs or performance issues.
+
+**A/B Testing:** You can use a Canary deployment to test how a new feature performs against the old one with a small subset of users (e.g., measuring conversion rates).
+
 
 ### Limitrange: 
 It ensures that POD is using the only allocated resouces. e.g CPU and Memory should not be overused by POD with LimitRange Tag.
